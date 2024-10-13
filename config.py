@@ -10,7 +10,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI=os.getenv("SQLALCHEMY_DATABASE_URI")
     SWAGGER = {
         'title': 'Ferrand MALELA API avec Flask et Swagger',
-        'uiversion': 3,  # Changé de 3 à 2
+        'uiversion': 3,
         'description': 'Documentation de l\'API avec Flask et Swagger',
         'version': '1.0.0',
         'contact': {
@@ -21,8 +21,8 @@ class Config:
             {
                 'endpoint': 'apispec',
                 'route': '/apispec.json',
-                'rule_filter': lambda rule: True,  # all in
-                'model_filter': lambda tag: True,  # all in
+                'rule_filter': lambda rule: True,
+                'model_filter': lambda tag: True,
             }
         ],
         'static_url_path': '/flasgger_static',
