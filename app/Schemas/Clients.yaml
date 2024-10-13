@@ -1,0 +1,400 @@
+swagger: "2.0"
+info:
+  title: API de Gestion de Blog
+  version: 1.0.0
+  description: API pour gérer les utilisateurs, publications, commentaires et catégories d'un blog
+
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+    required:
+      - username
+      - email
+      - password
+
+  Post:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      content:
+        type: string
+      author_id:
+        type: integer
+    required:
+      - title
+      - content
+      - author_id
+
+  Comment:
+    type: object
+    properties:
+      id:
+        type: integer
+      content:
+        type: string
+      post_id:
+        type: integer
+      author_id:
+        type: integer
+    required:
+      - content
+      - post_id
+      - author_id
+
+  Category:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+      - name
+
+paths:
+  /users:
+    get:
+      summary: Récupère la liste des utilisateurs
+      tags:
+        - Gestion des Utilisateurs
+      responses:
+        '200':
+          description: Liste des utilisateurs
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '401':
+          description: Non autorisé
+        '500':
+          description: Erreur serveur interne
+    post:
+      summary: Crée un nouvel utilisateur
+      tags:
+        - Gestion des Utilisateurs
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '201':
+          description: Utilisateur créé
+        '400':
+          description: Requête invalide
+        '500':
+          description: Erreur serveur interne
+
+  /users/{id}:
+    get:
+      summary: Récupère un utilisateur par son ID
+      tags:
+        - Gestion des Utilisateurs
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de l'utilisateur
+      responses:
+        '200':
+          description: Détails de l'utilisateur
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Utilisateur non trouvé
+    put:
+      summary: Met à jour un utilisateur
+      tags:
+        - Gestion des Utilisateurs
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de l'utilisateur à mettre à jour
+        - in: body
+          name: user
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: Utilisateur mis à jour
+        '400':
+          description: Requête invalide
+        '404':
+          description: Utilisateur non trouvé
+    delete:
+      summary: Supprime un utilisateur
+      tags:
+        - Gestion des Utilisateurs
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de l'utilisateur à supprimer
+      responses:
+        '204':
+          description: Utilisateur supprimé
+        '404':
+          description: Utilisateur non trouvé
+
+  /posts:
+    get:
+      summary: Récupère la liste des publications
+      tags:
+        - Gestion des Publications
+      responses:
+        '200':
+          description: Liste des publications
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Post'
+    post:
+      summary: Crée une nouvelle publication
+      tags:
+        - Gestion des Publications
+      parameters:
+        - in: body
+          name: post
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        '201':
+          description: Publication créée
+        '400':
+          description: Requête invalide
+
+  /posts/{id}:
+    get:
+      summary: Récupère une publication par son ID
+      tags:
+        - Gestion des Publications
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de la publication
+      responses:
+        '200':
+          description: Détails de la publication
+          schema:
+            $ref: '#/definitions/Post'
+        '404':
+          description: Publication non trouvée
+    put:
+      summary: Met à jour une publication
+      tags:
+        - Gestion des Publications
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de la publication à mettre à jour
+        - in: body
+          name: post
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        '200':
+          description: Publication mise à jour
+        '400':
+          description: Requête invalide
+        '404':
+          description: Publication non trouvée
+    delete:
+      summary: Supprime une publication
+      tags:
+        - Gestion des Publications
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de la publication à supprimer
+      responses:
+        '204':
+          description: Publication supprimée
+        '404':
+          description: Publication non trouvée
+
+  /comments:
+    get:
+      summary: Récupère la liste des commentaires
+      tags:
+        - Gestion des Commentaires
+      responses:
+        '200':
+          description: Liste des commentaires
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comment'
+    post:
+      summary: Crée un nouveau commentaire
+      tags:
+        - Gestion des Commentaires
+      parameters:
+        - in: body
+          name: comment
+          required: true
+          schema:
+            $ref: '#/definitions/Comment'
+      responses:
+        '201':
+          description: Commentaire créé
+        '400':
+          description: Requête invalide
+
+  /comments/{id}:
+    get:
+      summary: Récupère un commentaire par son ID
+      tags:
+        - Gestion des Commentaires
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID du commentaire
+      responses:
+        '200':
+          description: Détails du commentaire
+          schema:
+            $ref: '#/definitions/Comment'
+        '404':
+          description: Commentaire non trouvé
+    put:
+      summary: Met à jour un commentaire
+      tags:
+        - Gestion des Commentaires
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID du commentaire à mettre à jour
+        - in: body
+          name: comment
+          required: true
+          schema:
+            $ref: '#/definitions/Comment'
+      responses:
+        '200':
+          description: Commentaire mis à jour
+        '400':
+          description: Requête invalide
+        '404':
+          description: Commentaire non trouvé
+    delete:
+      summary: Supprime un commentaire
+      tags:
+        - Gestion des Commentaires
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID du commentaire à supprimer
+      responses:
+        '204':
+          description: Commentaire supprimé
+        '404':
+          description: Commentaire non trouvé
+
+  /categories:
+    get:
+      summary: Récupère la liste des catégories
+      tags:
+        - Gestion des Catégories
+      responses:
+        '200':
+          description: Liste des catégories
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+    post:
+      summary: Crée une nouvelle catégorie
+      tags:
+        - Gestion des Catégories
+      parameters:
+        - in: body
+          name: category
+          required: true
+          schema:
+            $ref: '#/definitions/Category'
+      responses:
+        '201':
+          description: Catégorie créée
+        '400':
+          description: Requête invalide
+
+  /categories/{id}:
+    put:
+      summary: Met à jour une catégorie
+      tags:
+        - Gestion des Catégories
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de la catégorie à mettre à jour
+        - in: body
+          name: category
+          required: true
+          schema:
+            $ref: '#/definitions/Category'
+      responses:
+        '200':
+          description: Catégorie mise à jour
+        '400':
+          description: Requête invalide
+        '404':
+          description: Catégorie non trouvée
+    delete:
+      summary: Supprime une catégorie
+      tags:
+        - Gestion des Catégories
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: ID de la catégorie à supprimer
+      responses:
+        '204':
+          description: Catégorie supprimée
+        '404':
+          description: Catégorie non trouvée
+
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+
+security:
+  - bearerAuth: []
