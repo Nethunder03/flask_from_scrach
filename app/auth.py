@@ -4,13 +4,11 @@ from .models import User
 from .schemas import UserSchema
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token
-from flasgger import swag_from
 from flask_jwt_extended import jwt_required, unset_jwt_cookies, get_jwt_identity
 
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['POST'])
-@swag_from("Schemas/User.yaml")
 def register():
     """
     Enregistrement d'un nouvel utilisateur.
@@ -36,43 +34,9 @@ def register():
 
 
 @auth_bp.route('/login', methods=['POST'])
-@swag_from({
-    'tags': ['Gestion des Authentification'],
-    'description': 'Se connecter à l\'API',
-    'parameters': [
-        {
-            'email': 'email',
-            'in': 'formData',
-            'type': 'string',
-            'required': True,
-            'description': 'Email'
-        },
-        {
-            'name': 'password',
-            'in': 'formData',
-            'type': 'string',
-            'required': True,
-            'description': 'Mot de passe'
-        }
-    ],
-    'responses': {
-        '200': {
-            'description': 'Connexion réussie',
-            'schema': {
-                'type': 'object',
-                'properties': {
-                    'token': {
-                        'type': 'string',
-                        'description': 'Token JWT'
-                    }
-                }
-            }
-        }
-    }
-})
 def login():
     """
-    Authentifie un utilisateur et retourne des tokens d'accès et de rafraîchissement.
+    Authentifie un utilisateur et retourne les tokens JWT
     """
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
@@ -91,18 +55,6 @@ def login():
 
 @auth_bp.route('/logout', methods=['POST'])
 @jwt_required()
-@swag_from({
-    'tags': ['Gestion des Authentification'],
-    'description': 'Déconnexion de l\'utilisateur',
-    'responses': {
-        '200': {
-            'description': 'Déconnexion réussie'
-        },
-        '401': {
-            'description': 'Token invalide ou non fourni'
-        }
-    }
-})
 def logout():
     """
     Déconnecte l'utilisateur en supprimant le token JWT.

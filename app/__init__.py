@@ -11,7 +11,7 @@ def create_app():
     from .routes import api_bp
 
     app.register_blueprint(api_bp)
-    Swagger(app, template_file='Schemas/Clients.yaml')
+    Swagger(app, template_file='Schemas/swagger.json')
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
