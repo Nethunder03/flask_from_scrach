@@ -5,7 +5,7 @@
     "description": "API pour gérer les utilisateurs, publications, commentaires et catégories.",
     "version": "1.0.0"
   },
-  "host": "dpg-cs630mdumphs73b4ju40-a.oregon-postgres.render.com",
+  "host": "flask-from-scrach-2.onrender.com",
   "basePath": "/",
   "schemes": ["https"],
   "paths": {
